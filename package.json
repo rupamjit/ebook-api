@@ -1,0 +1,25 @@
+{
+  "name": "ebook-api",
+  "version": "1.0.0",
+  "description": "This is a ebook api",
+  "keywords": [
+    "rest",
+    "api",
+    "express",
+    "mongodb"
+  ],
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev":"nodemon server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}

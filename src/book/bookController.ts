@@ -161,10 +161,42 @@ const getSingleBook = async (
     }
 
     return res.json(book);
-
   } catch (error) {
     return next(createHttpError(500, `Error while getting ebook: ${error}`));
   }
 };
 
-export { createBook, updateBook, getAllBooks, getSingleBook };
+const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
+  const bookId = req.params.bookId;
+
+  const book = await bookModel.findOne({ _id: bookId });
+
+  if (!book) {
+    return next(createHttpError(404, "Book not found"));
+  }
+
+  const _req = req as AuthRequest;
+  if (book.author.toString() !== _req.userId) {
+    return next(createHttpError(403, "Unauthorized to update this book"));
+  }
+
+  const coverFileSplits = book.coverImage.split("/");
+
+  const coverImagePublicId =
+    coverFileSplits.at(-2) + "/" + coverFileSplits.at(-1)?.split(".").at(-2);
+
+  const bookFileSplits = book.file.split("/");
+  const bookFilePublicId = bookFileSplits.at(-2) + "/" + bookFileSplits.at(-1);
+//   console.log("bookFilePublicId", bookFilePublicId);
+
+  await cloudinary.uploader.destroy(coverImagePublicId);
+  await cloudinary.uploader.destroy(bookFilePublicId, {
+    resource_type: "raw",
+  });
+
+  const deletedBook = await bookModel.deleteOne({ _id: bookId });
+
+  return res.status(204).json(deletedBook);
+}
+
+export { createBook, updateBook, getAllBooks, getSingleBook, deleteBook };

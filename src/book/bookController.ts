@@ -4,7 +4,7 @@ import path from "node:path";
 import bookModel from "./bookModel";
 import fs from "node:fs";
 
-const createBook = async (req: Request, res: Response, next: NextFunction) => {
+const createBook = async (req: Request, res: Response) => {
   const { title, genre } = req.body;
 
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -41,6 +41,9 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 
   console.log("bookFileUploadResult", bookFileUploadResult);
   console.log("uploadResult:", uploadResult);
+
+// @ts-ignore
+  console.log("User Id",req.userId)
 
   const newBook = await bookModel.create({
     title,

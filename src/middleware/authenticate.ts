@@ -20,7 +20,7 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
     const _req = req as AuthRequest;
     _req.userId = deoded.sub as string;
   } catch (err) {
-    return next(createHttpError(401, "Token Expired"));
+    return next(createHttpError(401, `Token Expired-> ${err}`));
   }
 
   // console.log(deoded);
